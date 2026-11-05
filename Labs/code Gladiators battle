@@ -1,0 +1,62 @@
+using System;
+
+class ArenaBattle
+{
+    static void Main()
+    {
+        // --- Инициализация первого бойца ---
+        Console.WriteLine("=== РЕГИСТРАЦИЯ БОЙЦА 1 ===");
+        Console.Write("Здоровье: ");
+        int hp1 = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Защита (%): ");
+        int def1 = Convert.ToInt32(Console.ReadLine());
+
+        // --- Инициализация второго бойца ---
+        Console.WriteLine("\n=== РЕГИСТРАЦИЯ БОЙЦА 2 ===");
+        Console.Write("Здоровье: ");
+        int hp2 = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Защита (%): ");
+        int def2 = Convert.ToInt32(Console.ReadLine());
+
+        Random rng = new Random();
+        int hitCounter = 0; // Счетчик ударов
+
+        Console.WriteLine("\n>>> БИТВА НАЧАЛАСЬ <<<");
+
+        // Бой идет, пока у обоих есть здоровье
+        while (hp1 > 0 && hp2 > 0)
+        {
+            // --- Ход первого бойца ---
+            int baseDmg1 = rng.Next(15, 41); // Новый диапазон урона (15-40)
+            int finalDmg1 = baseDmg1 - (baseDmg1 * def2 / 100); // Пробиваем защиту второго
+            hp2 -= finalDmg1;
+            hitCounter++;
+
+            Console.WriteLine($"Боец 1 бьет с силой {baseDmg1}. Пробило защиты: {finalDmg1}. У Бойца 2 осталось: {hp2} HP");
+
+            // Если второй умер, первый больше не бьет
+            if (hp2 <= 0) break;
+
+            // --- Ход второго бойца ---
+            int baseDmg2 = rng.Next(15, 41);
+            int finalDmg2 = baseDmg2 - (baseDmg2 * def1 / 100); // Пробиваем защиту первого
+            hp1 -= finalDmg2;
+            hitCounter++;
+
+            Console.WriteLine($"Боец 2 бьет с силой {baseDmg2}. Пробило защиты: {finalDmg2}. У Бойца 1 осталось: {hp1} HP");
+        }
+
+        // --- Итоги ---
+        Console.WriteLine("\n>>> БОЙ ЗАВЕРШЕН <<<");
+        Console.WriteLine($"Общее количество ударов: {hitCounter}");
+
+        if (hp1 > 0 && hp2 <= 0)
+            Console.WriteLine("Победа за Бойцом 1!");
+        else if (hp2 > 0 && hp1 <= 0)
+            Console.WriteLine("Победа за Бойцом 2!");
+        else
+            Console.WriteLine("Оба пали смертью храбрых... Ничья.");
+
+        Console.ReadKey(); // Чтобы консоль не закрылась сразу
+    }
+}
